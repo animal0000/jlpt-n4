@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>JLPT N4 마스터 허브 | 공식문제집 1·2집 195문항 완결판</title>
+<style>
+  :root {
+    --navy: #1A2F8A; --navy-dark: #101E56; --navy-light: #EEF2F9;
+    --red: #C0392B; --green: #198754; --yellow: #F59E0B;
+    --bg: #F4F6FA; --card: #FFFFFF; --line: #E2E8F0;
+    --text: #1E293B; --muted: #64748B;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "Pretendard", sans-serif;
+    line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  .shell { max-width: 920px; margin: 0 auto; padding: 24px 16px 80px; }
+  header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+    color: #fff; padding: 32px 24px; border-radius: 20px; margin-bottom: 24px;
+    box-shadow: 0 12px 30px rgba(26,47,138,0.18);
+  }
+  header h1 { margin: 0 0 8px; font-size: 26px; font-weight: 900; letter-spacing: -0.02em; }
+  header p { margin: 0; color: #CBD5E1; font-size: 14.5px; }
+  .score-bar {
+    display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap;
+  }
+  .score-pill {
+    background: rgba(255,255,255,0.14); padding: 7px 14px; border-radius: 999px;
+    font-size: 13px; font-weight: 800; backdrop-filter: blur(8px);
+  }
+  .round-selector {
+    display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center;
+  }
+  .round-btn {
+    border: 1px solid #CBD5E1; background: #fff; color: var(--navy);
+    padding: 8px 16px; border-radius: 10px; font-weight: 800; font-size: 13.5px;
+    cursor: pointer; transition: all 0.15s ease;
+  }
+  .round-btn.active {
+    background: #0F172A; color: #fff; border-color: #0F172A;
+  }
+  .tabs {
+    display: flex; gap: 8px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 4px;
+  }
+  .tab-btn {
+    border: 1px solid var(--line); background: #fff; color: var(--muted);
+    padding: 10px 18px; border-radius: 12px; font-weight: 800; font-size: 14px;
+    cursor: pointer; white-space: nowrap; transition: all 0.15s ease;
+  }
+  .tab-btn:hover { background: #F8FAFC; color: var(--navy); }
+  .tab-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .tab-btn.review { color: var(--red); border-color: #FECACA; }
+  .tab-btn.review.active { background: var(--red); color: #fff; border-color: var(--red); }
+
+  .question-list { display: flex; flex-direction: column; gap: 20px; }
+  .question-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+    padding: 22px; box-shadow: 0 4px 14px rgba(0,0,0,0.03); transition: all 0.2s ease;
+  }
+  .question-card:hover { border-color: #CBD5E1; box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
+  .card-meta {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
+    border-bottom: 1px solid #F1F5F9; pb: 12px; flex-wrap: wrap; gap: 8px;
+  }
+  .meta-left { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .badge {
+    padding: 4px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 800;
+  }
+  .badge-vol { background: #F1F5F9; color: #475569; }
+  .badge-sec { background: #E0E7FF; color: #3730A3; }
+  .badge-num { background: #F8FAFC; border: 1px solid #CBD5E1; color: #0F172A; }
+  
+  .crop-wrapper {
+    background: #FAFAFA; border: 1px solid #E2E8F0; border-radius: 12px;
+    overflow: hidden; margin-bottom: 18px; text-align: center;
+  }
+  .crop-wrapper img {
+    max-width: 100%; height: auto; display: block; margin: 0 auto;
+  }
+  
+  .audio-box {
+    background: #EEF2F9; border-left: 4px solid var(--navy); padding: 14px 18px;
+    border-radius: 8px; margin-bottom: 16px;
+  }
+  .audio-box audio { width: 100%; margin-top: 8px; }
+
+  .choice-box {
+    display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap;
+  }
+  .choice-btn {
+    flex: 1; min-width: 60px; padding: 12px 16px; border: 2px solid #CBD5E1;
+    background: #fff; border-radius: 10px; font-size: 16px; font-weight: 900;
+    cursor: pointer; transition: all 0.15s ease; color: #334155; text-align: center;
+  }
+  .choice-btn:hover { border-color: var(--navy); background: #F8FAFC; }
+  .choice-btn.selected-correct { background: #D1FAE5; border-color: var(--green); color: #065F46; }
+  .choice-btn.selected-wrong { background: #FEE2E2; border-color: var(--red); color: #991B1B; }
+
+  .explanation-box {
+    margin-top: 16px; padding: 16px; background: #FFFBEB; border: 1px solid #FDE68A;
+    border-radius: 10px; display: none; font-size: 14px; color: #92400E;
+  }
+  .explanation-box.show { display: block; }
+  .toggle-exp-btn {
+    background: none; border: none; color: #64748B; font-size: 13px; font-weight: 700;
+    cursor: pointer; margin-top: 10px; padding: 0; text-decoration: underline;
+  }
+  .instant-box {
+    padding: 16px; background: #F1F5F9; border-radius: 10px; margin-bottom: 14px;
+    font-size: 14px; color: #334155; text-align: center; font-weight: 700;
+  }
+  footer {
+    text-align: center; margin-top: 50px; color: var(--muted); font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <h1>🇯🇵 JLPT N4 공식문제집 올인원 허브</h1>
+    <p>공식문제집 제1집(97문항) + 제2집(98문항) = 총 195문항 전수 탑재 (Tier 1 완결판)</p>
+    <div class="score-bar">
+      <div class="score-pill" id="totalCountPill">선택 회차: 195문항</div>
+      <div class="score-pill" id="solvedPill">풀이: 0/195</div>
+      <div class="score-pill" id="scorePill">정답: 0</div>
+      <div class="score-pill" id="ratePill">정답률: 0%</div>
+    </div>
+  </header>
+
+  <div class="round-selector">
+    <span style="font-size: 13.5px; font-weight: 800; color: #475569; margin-right: 4px;">회차 선택:</span>
+    <button class="round-btn active" data-round="all">전체 회차 (195)</button>
+    <button class="round-btn" data-round="1">제1집 (97)</button>
+    <button class="round-btn" data-round="2">제2집 (98)</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="all">전체 문항</button>
+    <button class="tab-btn" data-tab="vocab">문자·어휘 (69)</button>
+    <button class="tab-btn" data-tab="grammar">문법·독해 (70)</button>
+    <button class="tab-btn" data-tab="listening">청해 (56)</button>
+    <button class="tab-btn review" data-tab="review">🔥 오답 복습 (<span id="wrongCount">0</span>)</button>
+  </div>
+
+  <div class="question-list" id="qList"></div>
+
+  <footer>
+    <p>JLPT N4 Official Practice Workbook Vol.1 & Vol.2 Master Hub</p>
+    <p>배재중학교 AI중점학교 통합 포털 연동형 독립 학습기</p>
+  </footer>
+</div>
+
+<script>
+const QUESTIONS = [{"id": "vol1_vocab_01", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 1", "q_num": 1, "answer": 1, "crop_img": "crops/vol1/vocab_q01.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_02", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 1", "q_num": 2, "answer": 1, "crop_img": "crops/vol1/vocab_q02.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_03", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 1", "q_num": 3, "answer": 4, "crop_img": "crops/vol1/vocab_q03.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_04", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 1", "q_num": 4, "answer": 2, "crop_img": "crops/vol1/vocab_q04.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_05", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 1", "q_num": 5, "answer": 2, "crop_img": "crops/vol1/vocab_q05.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_06", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 1", "q_num": 6, "answer": 3, "crop_img": "crops/vol1/vocab_q06.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_07", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 1", "q_num": 7, "answer": 1, "crop_img": "crops/vol1/vocab_q07.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_08", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 1", "q_num": 8, "answer": 2, "crop_img": "crops/vol1/vocab_q08.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_09", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 1", "q_num": 9, "answer": 4, "crop_img": "crops/vol1/vocab_q09.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_10", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 2", "q_num": 10, "answer": 1, "crop_img": "crops/vol1/vocab_q10.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_11", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 2", "q_num": 11, "answer": 4, "crop_img": "crops/vol1/vocab_q11.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_12", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 2", "q_num": 12, "answer": 3, "crop_img": "crops/vol1/vocab_q12.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_13", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 2", "q_num": 13, "answer": 4, "crop_img": "crops/vol1/vocab_q13.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_14", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 2", "q_num": 14, "answer": 4, "crop_img": "crops/vol1/vocab_q14.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_15", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 2", "q_num": 15, "answer": 1, "crop_img": "crops/vol1/vocab_q15.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_16", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 3", "q_num": 16, "answer": 4, "crop_img": "crops/vol1/vocab_q16.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_17", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 3", "q_num": 17, "answer": 3, "crop_img": "crops/vol1/vocab_q17.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_18", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 3", "q_num": 18, "answer": 2, "crop_img": "crops/vol1/vocab_q18.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_19", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 3", "q_num": 19, "answer": 2, "crop_img": "crops/vol1/vocab_q19.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_20", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 3", "q_num": 20, "answer": 4, "crop_img": "crops/vol1/vocab_q20.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_21", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 3", "q_num": 21, "answer": 3, "crop_img": "crops/vol1/vocab_q21.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_22", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 3", "q_num": 22, "answer": 1, "crop_img": "crops/vol1/vocab_q22.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_23", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 3", "q_num": 23, "answer": 2, "crop_img": "crops/vol1/vocab_q23.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_24", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 3", "q_num": 24, "answer": 3, "crop_img": "crops/vol1/vocab_q24.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_25", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 4", "q_num": 25, "answer": 3, "crop_img": "crops/vol1/vocab_q25.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_26", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 4", "q_num": 26, "answer": 2, "crop_img": "crops/vol1/vocab_q26.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_27", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 4", "q_num": 27, "answer": 1, "crop_img": "crops/vol1/vocab_q27.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_28", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 4", "q_num": 28, "answer": 3, "crop_img": "crops/vol1/vocab_q28.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_29", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 4", "q_num": 29, "answer": 2, "crop_img": "crops/vol1/vocab_q29.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_30", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 5", "q_num": 30, "answer": 4, "crop_img": "crops/vol1/vocab_q30.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_31", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 5", "q_num": 31, "answer": 3, "crop_img": "crops/vol1/vocab_q31.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_32", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 5", "q_num": 32, "answer": 4, "crop_img": "crops/vol1/vocab_q32.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_33", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 5", "q_num": 33, "answer": 1, "crop_img": "crops/vol1/vocab_q33.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_vocab_34", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 5", "q_num": 34, "answer": 2, "crop_img": "crops/vol1/vocab_q34.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_01", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 1, "answer": 3, "crop_img": "crops/vol1/grammar_q01.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_02", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 2, "answer": 4, "crop_img": "crops/vol1/grammar_q02.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_03", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 3, "answer": 1, "crop_img": "crops/vol1/grammar_q03.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_04", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 4, "answer": 2, "crop_img": "crops/vol1/grammar_q04.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_05", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 5, "answer": 4, "crop_img": "crops/vol1/grammar_q05.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_06", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 6, "answer": 2, "crop_img": "crops/vol1/grammar_q06.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_07", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 7, "answer": 3, "crop_img": "crops/vol1/grammar_q07.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_08", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 8, "answer": 1, "crop_img": "crops/vol1/grammar_q08.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_09", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 9, "answer": 2, "crop_img": "crops/vol1/grammar_q09.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_10", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 10, "answer": 4, "crop_img": "crops/vol1/grammar_q10.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_11", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 11, "answer": 1, "crop_img": "crops/vol1/grammar_q11.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_12", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 12, "answer": 1, "crop_img": "crops/vol1/grammar_q12.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_13", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 13, "answer": 3, "crop_img": "crops/vol1/grammar_q13.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_14", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 14, "answer": 4, "crop_img": "crops/vol1/grammar_q14.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_15", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 15, "answer": 2, "crop_img": "crops/vol1/grammar_q15.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_16", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 2", "q_num": 16, "answer": 3, "crop_img": "crops/vol1/grammar_q16.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_17", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 2", "q_num": 17, "answer": 2, "crop_img": "crops/vol1/grammar_q17.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_18", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 2", "q_num": 18, "answer": 4, "crop_img": "crops/vol1/grammar_q18.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_19", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 2", "q_num": 19, "answer": 3, "crop_img": "crops/vol1/grammar_q19.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_20", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 2", "q_num": 20, "answer": 3, "crop_img": "crops/vol1/grammar_q20.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_21", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 3", "q_num": 21, "answer": 2, "crop_img": "crops/vol1/grammar_q21.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_22", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 3", "q_num": 22, "answer": 3, "crop_img": "crops/vol1/grammar_q22.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_23", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 3", "q_num": 23, "answer": 2, "crop_img": "crops/vol1/grammar_q23.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_24", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 3", "q_num": 24, "answer": 1, "crop_img": "crops/vol1/grammar_q24.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_25", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 3", "q_num": 25, "answer": 4, "crop_img": "crops/vol1/grammar_q25.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_26", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (독해)", "mondai": "문제 4 (단문)", "q_num": 26, "answer": 4, "crop_img": "crops/vol1/grammar_q26.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_27", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (독해)", "mondai": "문제 4 (단문)", "q_num": 27, "answer": 3, "crop_img": "crops/vol1/grammar_q27.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_28", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (독해)", "mondai": "문제 4 (단문)", "q_num": 28, "answer": 2, "crop_img": "crops/vol1/grammar_q28.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_29", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (독해)", "mondai": "문제 4 (단문)", "q_num": 29, "answer": 3, "crop_img": "crops/vol1/grammar_q29.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_30", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (독해)", "mondai": "문제 5 (중문)", "q_num": 30, "answer": 2, "crop_img": "crops/vol1/grammar_q30.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_31", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (독해)", "mondai": "문제 5 (중문)", "q_num": 31, "answer": 4, "crop_img": "crops/vol1/grammar_q31.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_32", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (독해)", "mondai": "문제 5 (중문)", "q_num": 32, "answer": 4, "crop_img": "crops/vol1/grammar_q32.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_33", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (독해)", "mondai": "문제 5 (중문)", "q_num": 33, "answer": 1, "crop_img": "crops/vol1/grammar_q33.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_34", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (독해)", "mondai": "문제 6 (정보검색)", "q_num": 34, "answer": 3, "crop_img": "crops/vol1/grammar_q34.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_grammar_35", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "grammar", "section_label": "문법·독해 (독해)", "mondai": "문제 6 (정보검색)", "q_num": 35, "answer": 2, "crop_img": "crops/vol1/grammar_q35.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol1_listening_01", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 1 (과제 이해)", "q_num": 1, "answer": 1, "crop_img": "crops/vol1/listening_q01.png", "audio_clip": "audio_clips/vol1/listening_q01.mp3", "is_instant_response": false}, {"id": "vol1_listening_02", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 1 (과제 이해)", "q_num": 2, "answer": 4, "crop_img": "crops/vol1/listening_q02.png", "audio_clip": "audio_clips/vol1/listening_q02.mp3", "is_instant_response": false}, {"id": "vol1_listening_03", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 1 (과제 이해)", "q_num": 3, "answer": 3, "crop_img": "crops/vol1/listening_q03.png", "audio_clip": "audio_clips/vol1/listening_q03.mp3", "is_instant_response": false}, {"id": "vol1_listening_04", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 1 (과제 이해)", "q_num": 4, "answer": 4, "crop_img": "crops/vol1/listening_q04.png", "audio_clip": "audio_clips/vol1/listening_q04.mp3", "is_instant_response": false}, {"id": "vol1_listening_05", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 1 (과제 이해)", "q_num": 5, "answer": 3, "crop_img": "crops/vol1/listening_q05.png", "audio_clip": "audio_clips/vol1/listening_q05.mp3", "is_instant_response": false}, {"id": "vol1_listening_06", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 1 (과제 이해)", "q_num": 6, "answer": 2, "crop_img": "crops/vol1/listening_q06.png", "audio_clip": "audio_clips/vol1/listening_q06.mp3", "is_instant_response": false}, {"id": "vol1_listening_07", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 1 (과제 이해)", "q_num": 7, "answer": 2, "crop_img": "crops/vol1/listening_q07.png", "audio_clip": "audio_clips/vol1/listening_q07.mp3", "is_instant_response": false}, {"id": "vol1_listening_08", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 1 (과제 이해)", "q_num": 8, "answer": 1, "crop_img": "crops/vol1/listening_q08.png", "audio_clip": "audio_clips/vol1/listening_q08.mp3", "is_instant_response": false}, {"id": "vol1_listening_09", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 2 (포인트 이해)", "q_num": 9, "answer": 4, "crop_img": "crops/vol1/listening_q09.png", "audio_clip": "audio_clips/vol1/listening_q09.mp3", "is_instant_response": false}, {"id": "vol1_listening_10", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 2 (포인트 이해)", "q_num": 10, "answer": 2, "crop_img": "crops/vol1/listening_q10.png", "audio_clip": "audio_clips/vol1/listening_q10.mp3", "is_instant_response": false}, {"id": "vol1_listening_11", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 2 (포인트 이해)", "q_num": 11, "answer": 3, "crop_img": "crops/vol1/listening_q11.png", "audio_clip": "audio_clips/vol1/listening_q11.mp3", "is_instant_response": false}, {"id": "vol1_listening_12", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 2 (포인트 이해)", "q_num": 12, "answer": 3, "crop_img": "crops/vol1/listening_q12.png", "audio_clip": "audio_clips/vol1/listening_q12.mp3", "is_instant_response": false}, {"id": "vol1_listening_13", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 2 (포인트 이해)", "q_num": 13, "answer": 1, "crop_img": "crops/vol1/listening_q13.png", "audio_clip": "audio_clips/vol1/listening_q13.mp3", "is_instant_response": false}, {"id": "vol1_listening_14", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 2 (포인트 이해)", "q_num": 14, "answer": 2, "crop_img": "crops/vol1/listening_q14.png", "audio_clip": "audio_clips/vol1/listening_q14.mp3", "is_instant_response": false}, {"id": "vol1_listening_15", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 2 (포인트 이해)", "q_num": 15, "answer": 3, "crop_img": "crops/vol1/listening_q15.png", "audio_clip": "audio_clips/vol1/listening_q15.mp3", "is_instant_response": false}, {"id": "vol1_listening_16", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 3 (발화 표현)", "q_num": 16, "answer": 1, "crop_img": "crops/vol1/listening_q16.png", "audio_clip": "audio_clips/vol1/listening_q16.mp3", "is_instant_response": false}, {"id": "vol1_listening_17", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 3 (발화 표현)", "q_num": 17, "answer": 2, "crop_img": "crops/vol1/listening_q17.png", "audio_clip": "audio_clips/vol1/listening_q17.mp3", "is_instant_response": false}, {"id": "vol1_listening_18", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 3 (발화 표현)", "q_num": 18, "answer": 1, "crop_img": "crops/vol1/listening_q18.png", "audio_clip": "audio_clips/vol1/listening_q18.mp3", "is_instant_response": false}, {"id": "vol1_listening_19", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 3 (발화 표현)", "q_num": 19, "answer": 2, "crop_img": "crops/vol1/listening_q19.png", "audio_clip": "audio_clips/vol1/listening_q19.mp3", "is_instant_response": false}, {"id": "vol1_listening_20", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 3 (발화 표현)", "q_num": 20, "answer": 1, "crop_img": "crops/vol1/listening_q20.png", "audio_clip": "audio_clips/vol1/listening_q20.mp3", "is_instant_response": false}, {"id": "vol1_listening_21", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 4 (즉각 응답)", "q_num": 21, "answer": 2, "crop_img": "crops/vol1/listening_q21.png", "audio_clip": "audio_clips/vol1/listening_q21.mp3", "is_instant_response": true}, {"id": "vol1_listening_22", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 4 (즉각 응답)", "q_num": 22, "answer": 3, "crop_img": "crops/vol1/listening_q22.png", "audio_clip": "audio_clips/vol1/listening_q22.mp3", "is_instant_response": true}, {"id": "vol1_listening_23", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 4 (즉각 응답)", "q_num": 23, "answer": 2, "crop_img": "crops/vol1/listening_q23.png", "audio_clip": "audio_clips/vol1/listening_q23.mp3", "is_instant_response": true}, {"id": "vol1_listening_24", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 4 (즉각 응답)", "q_num": 24, "answer": 1, "crop_img": "crops/vol1/listening_q24.png", "audio_clip": "audio_clips/vol1/listening_q24.mp3", "is_instant_response": true}, {"id": "vol1_listening_25", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 4 (즉각 응답)", "q_num": 25, "answer": 2, "crop_img": "crops/vol1/listening_q25.png", "audio_clip": "audio_clips/vol1/listening_q25.mp3", "is_instant_response": true}, {"id": "vol1_listening_26", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 4 (즉각 응답)", "q_num": 26, "answer": 3, "crop_img": "crops/vol1/listening_q26.png", "audio_clip": "audio_clips/vol1/listening_q26.mp3", "is_instant_response": true}, {"id": "vol1_listening_27", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 4 (즉각 응답)", "q_num": 27, "answer": 3, "crop_img": "crops/vol1/listening_q27.png", "audio_clip": "audio_clips/vol1/listening_q27.mp3", "is_instant_response": true}, {"id": "vol1_listening_28", "vol": 1, "vol_label": "공식문제집 제1집 (2012)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 4 (즉각 응답)", "q_num": 28, "answer": 1, "crop_img": "crops/vol1/listening_q28.png", "audio_clip": "audio_clips/vol1/listening_q28.mp3", "is_instant_response": true}, {"id": "vol2_vocab_01", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 1", "q_num": 1, "answer": 3, "crop_img": "crops/vol2/vocab_q01.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_02", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 1", "q_num": 2, "answer": 4, "crop_img": "crops/vol2/vocab_q02.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_03", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 1", "q_num": 3, "answer": 1, "crop_img": "crops/vol2/vocab_q03.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_04", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 1", "q_num": 4, "answer": 2, "crop_img": "crops/vol2/vocab_q04.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_05", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 1", "q_num": 5, "answer": 4, "crop_img": "crops/vol2/vocab_q05.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_06", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 1", "q_num": 6, "answer": 3, "crop_img": "crops/vol2/vocab_q06.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_07", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 1", "q_num": 7, "answer": 4, "crop_img": "crops/vol2/vocab_q07.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_08", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 1", "q_num": 8, "answer": 2, "crop_img": "crops/vol2/vocab_q08.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_09", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 1", "q_num": 9, "answer": 1, "crop_img": "crops/vol2/vocab_q09.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_10", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 2", "q_num": 10, "answer": 2, "crop_img": "crops/vol2/vocab_q10.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_11", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 2", "q_num": 11, "answer": 3, "crop_img": "crops/vol2/vocab_q11.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_12", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 2", "q_num": 12, "answer": 4, "crop_img": "crops/vol2/vocab_q12.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_13", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 2", "q_num": 13, "answer": 1, "crop_img": "crops/vol2/vocab_q13.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_14", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 2", "q_num": 14, "answer": 3, "crop_img": "crops/vol2/vocab_q14.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_15", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 2", "q_num": 15, "answer": 4, "crop_img": "crops/vol2/vocab_q15.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_16", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 3", "q_num": 16, "answer": 1, "crop_img": "crops/vol2/vocab_q16.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_17", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 3", "q_num": 17, "answer": 2, "crop_img": "crops/vol2/vocab_q17.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_18", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 3", "q_num": 18, "answer": 2, "crop_img": "crops/vol2/vocab_q18.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_19", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 3", "q_num": 19, "answer": 3, "crop_img": "crops/vol2/vocab_q19.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_20", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 3", "q_num": 20, "answer": 2, "crop_img": "crops/vol2/vocab_q20.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_21", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 3", "q_num": 21, "answer": 1, "crop_img": "crops/vol2/vocab_q21.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_22", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 3", "q_num": 22, "answer": 4, "crop_img": "crops/vol2/vocab_q22.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_23", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 3", "q_num": 23, "answer": 3, "crop_img": "crops/vol2/vocab_q23.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_24", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 3", "q_num": 24, "answer": 4, "crop_img": "crops/vol2/vocab_q24.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_25", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 3", "q_num": 25, "answer": 1, "crop_img": "crops/vol2/vocab_q25.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_26", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 4", "q_num": 26, "answer": 2, "crop_img": "crops/vol2/vocab_q26.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_27", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 4", "q_num": 27, "answer": 2, "crop_img": "crops/vol2/vocab_q27.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_28", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 4", "q_num": 28, "answer": 4, "crop_img": "crops/vol2/vocab_q28.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_29", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 4", "q_num": 29, "answer": 1, "crop_img": "crops/vol2/vocab_q29.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_30", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 4", "q_num": 30, "answer": 3, "crop_img": "crops/vol2/vocab_q30.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_31", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 5", "q_num": 31, "answer": 3, "crop_img": "crops/vol2/vocab_q31.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_32", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 5", "q_num": 32, "answer": 1, "crop_img": "crops/vol2/vocab_q32.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_33", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 5", "q_num": 33, "answer": 3, "crop_img": "crops/vol2/vocab_q33.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_34", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 5", "q_num": 34, "answer": 2, "crop_img": "crops/vol2/vocab_q34.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_vocab_35", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "vocab", "section_label": "문자·어휘", "mondai": "문제 5", "q_num": 35, "answer": 4, "crop_img": "crops/vol2/vocab_q35.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_01", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 1, "answer": 3, "crop_img": "crops/vol2/grammar_q01.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_02", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 2, "answer": 4, "crop_img": "crops/vol2/grammar_q02.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_03", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 3, "answer": 2, "crop_img": "crops/vol2/grammar_q03.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_04", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 4, "answer": 1, "crop_img": "crops/vol2/grammar_q04.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_05", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 5, "answer": 4, "crop_img": "crops/vol2/grammar_q05.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_06", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 6, "answer": 1, "crop_img": "crops/vol2/grammar_q06.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_07", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 7, "answer": 3, "crop_img": "crops/vol2/grammar_q07.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_08", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 8, "answer": 4, "crop_img": "crops/vol2/grammar_q08.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_09", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 9, "answer": 2, "crop_img": "crops/vol2/grammar_q09.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_10", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 10, "answer": 4, "crop_img": "crops/vol2/grammar_q10.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_11", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 11, "answer": 3, "crop_img": "crops/vol2/grammar_q11.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_12", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 12, "answer": 2, "crop_img": "crops/vol2/grammar_q12.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_13", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 13, "answer": 3, "crop_img": "crops/vol2/grammar_q13.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_14", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 14, "answer": 1, "crop_img": "crops/vol2/grammar_q14.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_15", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 1", "q_num": 15, "answer": 2, "crop_img": "crops/vol2/grammar_q15.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_16", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 2", "q_num": 16, "answer": 1, "crop_img": "crops/vol2/grammar_q16.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_17", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 2", "q_num": 17, "answer": 2, "crop_img": "crops/vol2/grammar_q17.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_18", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 2", "q_num": 18, "answer": 3, "crop_img": "crops/vol2/grammar_q18.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_19", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 2", "q_num": 19, "answer": 1, "crop_img": "crops/vol2/grammar_q19.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_20", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 2", "q_num": 20, "answer": 4, "crop_img": "crops/vol2/grammar_q20.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_21", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 3", "q_num": 21, "answer": 3, "crop_img": "crops/vol2/grammar_q21.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_22", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 3", "q_num": 22, "answer": 1, "crop_img": "crops/vol2/grammar_q22.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_23", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 3", "q_num": 23, "answer": 4, "crop_img": "crops/vol2/grammar_q23.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_24", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 3", "q_num": 24, "answer": 2, "crop_img": "crops/vol2/grammar_q24.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_25", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (문법)", "mondai": "문제 3", "q_num": 25, "answer": 3, "crop_img": "crops/vol2/grammar_q25.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_26", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (독해)", "mondai": "문제 4 (단문)", "q_num": 26, "answer": 4, "crop_img": "crops/vol2/grammar_q26.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_27", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (독해)", "mondai": "문제 4 (단문)", "q_num": 27, "answer": 2, "crop_img": "crops/vol2/grammar_q27.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_28", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (독해)", "mondai": "문제 4 (단문)", "q_num": 28, "answer": 3, "crop_img": "crops/vol2/grammar_q28.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_29", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (독해)", "mondai": "문제 4 (단문)", "q_num": 29, "answer": 4, "crop_img": "crops/vol2/grammar_q29.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_30", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (독해)", "mondai": "문제 5 (중문)", "q_num": 30, "answer": 3, "crop_img": "crops/vol2/grammar_q30.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_31", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (독해)", "mondai": "문제 5 (중문)", "q_num": 31, "answer": 1, "crop_img": "crops/vol2/grammar_q31.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_32", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (독해)", "mondai": "문제 5 (중문)", "q_num": 32, "answer": 2, "crop_img": "crops/vol2/grammar_q32.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_33", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (독해)", "mondai": "문제 5 (중문)", "q_num": 33, "answer": 3, "crop_img": "crops/vol2/grammar_q33.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_34", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (독해)", "mondai": "문제 6 (정보검색)", "q_num": 34, "answer": 4, "crop_img": "crops/vol2/grammar_q34.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_grammar_35", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "grammar", "section_label": "문법·독해 (독해)", "mondai": "문제 6 (정보검색)", "q_num": 35, "answer": 1, "crop_img": "crops/vol2/grammar_q35.png", "audio_clip": null, "is_instant_response": false}, {"id": "vol2_listening_01", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 1 (과제 이해)", "q_num": 1, "answer": 1, "crop_img": "crops/vol2/listening_q01.png", "audio_clip": "audio_clips/vol2/listening_q01.mp3", "is_instant_response": false}, {"id": "vol2_listening_02", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 1 (과제 이해)", "q_num": 2, "answer": 3, "crop_img": "crops/vol2/listening_q02.png", "audio_clip": "audio_clips/vol2/listening_q02.mp3", "is_instant_response": false}, {"id": "vol2_listening_03", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 1 (과제 이해)", "q_num": 3, "answer": 2, "crop_img": "crops/vol2/listening_q03.png", "audio_clip": "audio_clips/vol2/listening_q03.mp3", "is_instant_response": false}, {"id": "vol2_listening_04", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 1 (과제 이해)", "q_num": 4, "answer": 4, "crop_img": "crops/vol2/listening_q04.png", "audio_clip": "audio_clips/vol2/listening_q04.mp3", "is_instant_response": false}, {"id": "vol2_listening_05", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 1 (과제 이해)", "q_num": 5, "answer": 3, "crop_img": "crops/vol2/listening_q05.png", "audio_clip": "audio_clips/vol2/listening_q05.mp3", "is_instant_response": false}, {"id": "vol2_listening_06", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 1 (과제 이해)", "q_num": 6, "answer": 3, "crop_img": "crops/vol2/listening_q06.png", "audio_clip": "audio_clips/vol2/listening_q06.mp3", "is_instant_response": false}, {"id": "vol2_listening_07", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 1 (과제 이해)", "q_num": 7, "answer": 3, "crop_img": "crops/vol2/listening_q07.png", "audio_clip": "audio_clips/vol2/listening_q07.mp3", "is_instant_response": false}, {"id": "vol2_listening_08", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 1 (과제 이해)", "q_num": 8, "answer": 1, "crop_img": "crops/vol2/listening_q08.png", "audio_clip": "audio_clips/vol2/listening_q08.mp3", "is_instant_response": false}, {"id": "vol2_listening_09", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 2 (포인트 이해)", "q_num": 9, "answer": 1, "crop_img": "crops/vol2/listening_q09.png", "audio_clip": "audio_clips/vol2/listening_q09.mp3", "is_instant_response": false}, {"id": "vol2_listening_10", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 2 (포인트 이해)", "q_num": 10, "answer": 2, "crop_img": "crops/vol2/listening_q10.png", "audio_clip": "audio_clips/vol2/listening_q10.mp3", "is_instant_response": false}, {"id": "vol2_listening_11", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 2 (포인트 이해)", "q_num": 11, "answer": 4, "crop_img": "crops/vol2/listening_q11.png", "audio_clip": "audio_clips/vol2/listening_q11.mp3", "is_instant_response": false}, {"id": "vol2_listening_12", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 2 (포인트 이해)", "q_num": 12, "answer": 2, "crop_img": "crops/vol2/listening_q12.png", "audio_clip": "audio_clips/vol2/listening_q12.mp3", "is_instant_response": false}, {"id": "vol2_listening_13", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 2 (포인트 이해)", "q_num": 13, "answer": 2, "crop_img": "crops/vol2/listening_q13.png", "audio_clip": "audio_clips/vol2/listening_q13.mp3", "is_instant_response": false}, {"id": "vol2_listening_14", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 2 (포인트 이해)", "q_num": 14, "answer": 4, "crop_img": "crops/vol2/listening_q14.png", "audio_clip": "audio_clips/vol2/listening_q14.mp3", "is_instant_response": false}, {"id": "vol2_listening_15", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 2 (포인트 이해)", "q_num": 15, "answer": 3, "crop_img": "crops/vol2/listening_q15.png", "audio_clip": "audio_clips/vol2/listening_q15.mp3", "is_instant_response": false}, {"id": "vol2_listening_16", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 3 (발화 표현)", "q_num": 16, "answer": 2, "crop_img": "crops/vol2/listening_q16.png", "audio_clip": "audio_clips/vol2/listening_q16.mp3", "is_instant_response": false}, {"id": "vol2_listening_17", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 3 (발화 표현)", "q_num": 17, "answer": 2, "crop_img": "crops/vol2/listening_q17.png", "audio_clip": "audio_clips/vol2/listening_q17.mp3", "is_instant_response": false}, {"id": "vol2_listening_18", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 3 (발화 표현)", "q_num": 18, "answer": 1, "crop_img": "crops/vol2/listening_q18.png", "audio_clip": "audio_clips/vol2/listening_q18.mp3", "is_instant_response": false}, {"id": "vol2_listening_19", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 3 (발화 표현)", "q_num": 19, "answer": 3, "crop_img": "crops/vol2/listening_q19.png", "audio_clip": "audio_clips/vol2/listening_q19.mp3", "is_instant_response": false}, {"id": "vol2_listening_20", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 3 (발화 표현)", "q_num": 20, "answer": 2, "crop_img": "crops/vol2/listening_q20.png", "audio_clip": "audio_clips/vol2/listening_q20.mp3", "is_instant_response": false}, {"id": "vol2_listening_21", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 4 (즉각 응답)", "q_num": 21, "answer": 1, "crop_img": "crops/vol2/listening_q21.png", "audio_clip": "audio_clips/vol2/listening_q21.mp3", "is_instant_response": true}, {"id": "vol2_listening_22", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 4 (즉각 응답)", "q_num": 22, "answer": 3, "crop_img": "crops/vol2/listening_q22.png", "audio_clip": "audio_clips/vol2/listening_q22.mp3", "is_instant_response": true}, {"id": "vol2_listening_23", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 4 (즉각 응답)", "q_num": 23, "answer": 3, "crop_img": "crops/vol2/listening_q23.png", "audio_clip": "audio_clips/vol2/listening_q23.mp3", "is_instant_response": true}, {"id": "vol2_listening_24", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 4 (즉각 응답)", "q_num": 24, "answer": 1, "crop_img": "crops/vol2/listening_q24.png", "audio_clip": "audio_clips/vol2/listening_q24.mp3", "is_instant_response": true}, {"id": "vol2_listening_25", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 4 (즉각 응답)", "q_num": 25, "answer": 2, "crop_img": "crops/vol2/listening_q25.png", "audio_clip": "audio_clips/vol2/listening_q25.mp3", "is_instant_response": true}, {"id": "vol2_listening_26", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 4 (즉각 응답)", "q_num": 26, "answer": 3, "crop_img": "crops/vol2/listening_q26.png", "audio_clip": "audio_clips/vol2/listening_q26.mp3", "is_instant_response": true}, {"id": "vol2_listening_27", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 4 (즉각 응답)", "q_num": 27, "answer": 2, "crop_img": "crops/vol2/listening_q27.png", "audio_clip": "audio_clips/vol2/listening_q27.mp3", "is_instant_response": true}, {"id": "vol2_listening_28", "vol": 2, "vol_label": "공식문제집 제2집 (2018)", "section": "listening", "section_label": "청해 (듣기)", "mondai": "문제 4 (즉각 응답)", "q_num": 28, "answer": 1, "crop_img": "crops/vol2/listening_q28.png", "audio_clip": "audio_clips/vol2/listening_q28.mp3", "is_instant_response": true}];
+
+let state = {
+  activeRound: 'all',
+  activeTab: 'all',
+  answers: JSON.parse(localStorage.getItem('jlpt_n4_user_answers') || '{}')
+};
+
+function saveState() {
+  localStorage.setItem('jlpt_n4_user_answers', JSON.stringify(state.answers));
+}
+
+function updateScore() {
+  const currentFiltered = getFilteredQuestions(true);
+  const total = currentFiltered.length;
+  let solved = 0;
+  let correct = 0;
+  let wrong = 0;
+
+  QUESTIONS.forEach(q => {
+    const userA = state.answers[q.id];
+    if (userA !== undefined) {
+      if (userA === q.answer) correct++;
+      else wrong++;
+    }
+  });
+
+  currentFiltered.forEach(q => {
+    if (state.answers[q.id] !== undefined) solved++;
+  });
+
+  document.getElementById('totalCountPill').innerText = `선택 회차: ${total}문항`;
+  document.getElementById('solvedPill').innerText = `풀이: ${solved}/${total}`;
+  document.getElementById('scorePill').innerText = `정답: ${correct}`;
+  document.getElementById('ratePill').innerText = `정답률: ${solved > 0 ? Math.round((correct/solved)*100) : 0}%`;
+  document.getElementById('wrongCount').innerText = wrong;
+}
+
+function getFilteredQuestions(forStatsOnly = false) {
+  return QUESTIONS.filter(q => {
+    if (state.activeRound !== 'all' && q.vol !== parseInt(state.activeRound)) return false;
+    if (forStatsOnly) return true;
+    if (state.activeTab === 'all') return true;
+    if (state.activeTab === 'review') {
+      const userA = state.answers[q.id];
+      return userA !== undefined && userA !== q.answer;
+    }
+    return q.section === state.activeTab;
+  });
+}
+
+function render() {
+  updateScore();
+  const listEl = document.getElementById('qList');
+  listEl.innerHTML = '';
+
+  const filtered = getFilteredQuestions();
+
+  if (filtered.length === 0) {
+    listEl.innerHTML = `
+      <div style="text-align: center; padding: 48px 16px; background: #fff; border-radius: 16px; border: 1px dashed #CBD5E1;">
+        <h3 style="margin: 0 0 8px; font-size: 18px; color: #475569;">표시할 문항이 없습니다.</h3>
+        <p style="margin: 0; color: #94A3B8; font-size: 14px;">선택한 회차 또는 오답 복습 목록이 비어 있습니다.</p>
+      </div>
+    `;
+    return;
+  }
+
+  filtered.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `card_${q.id}`;
+
+    const userAns = state.answers[q.id];
+
+    let choiceBtns = '';
+    const numChoices = q.is_instant_response ? 3 : 4;
+    for (let c = 1; c <= numChoices; c++) {
+      let btnClass = 'choice-btn';
+      if (userAns !== undefined) {
+        if (c === q.answer) btnClass += ' selected-correct';
+        else if (c === userAns) btnClass += ' selected-wrong';
+      }
+      choiceBtns += `<button class="${btnClass}" onclick="handleSelect('${q.id}', ${c})">${c}</button>`;
+    }
+
+    let audioHtml = '';
+    if (q.audio_clip) {
+      audioHtml = `
+        <div class="audio-box">
+          <div style="font-weight: 800; font-size: 13px; color: var(--navy); margin-bottom: 4px;">
+            🎧 문항 ${q.q_num}번 전용 음성 클립
+          </div>
+          <audio controls preload="none">
+            <source src="${q.audio_clip}" type="audio/mp3">
+            브라우저가 오디오 재생을 지원하지 않습니다.
+          </audio>
+          <div style="font-size: 11px; color: #64748B; margin-top: 4px;">※ 개별 문항 단위로 정밀 슬라이스된 MP3 클립입니다.</div>
+        </div>
+      `;
+    }
+
+    let visualContent = '';
+    if (q.is_instant_response) {
+      visualContent = `
+        <div class="instant-box">
+          🎙️ [즉각 응답] 음성을 듣고 가장 알맞은 대답(1, 2, 3)을 고르세요.
+        </div>
+      `;
+    } else {
+      visualContent = `
+        <div class="crop-wrapper">
+          <img src="${q.crop_img}" alt="문항 ${q.q_num}번 이미지" loading="lazy">
+        </div>
+      `;
+    }
+
+    let resultBadge = '';
+    if (userAns !== undefined) {
+      if (userAns === q.answer) {
+        resultBadge = '<span class="badge" style="background:#D1FAE5; color:#065F46;">⭕ 정답</span>';
+      } else {
+        resultBadge = '<span class="badge" style="background:#FEE2E2; color:#991B1B;">❌ 오답</span>';
+      }
+    }
+
+    card.innerHTML = `
+      <div class="card-meta">
+        <div class="meta-left">
+          <span class="badge badge-vol">${q.vol_label}</span>
+          <span class="badge badge-sec">${q.section_label}</span>
+          <span class="badge badge-num">${q.mondai} 문항 ${q.q_num}번</span>
+        </div>
+        <div>${resultBadge}</div>
+      </div>
+
+      ${audioHtml}
+      ${visualContent}
+
+      <div class="choice-box">
+        ${choiceBtns}
+      </div>
+
+      <button class="toggle-exp-btn" onclick="toggleExp('${q.id}')">💡 정답 및 해설 보기</button>
+      <div class="explanation-box" id="exp_${q.id}">
+        <strong>정답: [ ${q.answer}번 ]</strong>
+        <p style="margin: 6px 0 0; font-size: 13.5px;">공식 정답표 기준 정답 번호는 <strong>${q.answer}번</strong>입니다.</p>
+      </div>
+    `;
+
+    listEl.appendChild(card);
+  });
+}
+
+function handleSelect(qId, choice) {
+  state.answers[qId] = choice;
+  saveState();
+  render();
+}
+
+function toggleExp(qId) {
+  const el = document.getElementById(`exp_${qId}`);
+  if (el) el.classList.toggle('show');
+}
+
+// Event Listeners
+document.querySelectorAll('.round-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    document.querySelectorAll('.round-btn').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    state.activeRound = e.target.getAttribute('data-round');
+    render();
+  });
+});
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    state.activeTab = e.target.getAttribute('data-tab');
+    render();
+  });
+});
+
+render();
+</script>
+</body>
+</html>
