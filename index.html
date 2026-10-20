@@ -249,7 +249,7 @@ function render() {
             🎧 문항 ${q.q_num}번 전용 음성 클립
           </div>
           <audio controls preload="none">
-            <source src="${q.audio_clip}" type="audio/mp3">
+            <source src="${q.audio_clip}?v=20261020_audio2" type="audio/mp3">
             브라우저가 오디오 재생을 지원하지 않습니다.
           </audio>
           <div style="font-size: 11px; color: #64748B; margin-top: 4px;">※ 개별 문항 단위로 정밀 슬라이스된 MP3 클립입니다.</div>
@@ -340,6 +340,17 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 });
 
 render();
+
+// [단일 오디오 배타적 재생 가드] 한 문항 재생 시 다른 모든 오디오 자동 일시정지 (중복 재생 원천 차단)
+document.addEventListener('play', function(e) {
+  if (e.target && e.target.tagName === 'AUDIO') {
+    document.querySelectorAll('audio').forEach(function(audio) {
+      if (audio !== e.target && !audio.paused) {
+        audio.pause();
+      }
+    });
+  }
+}, true);
 </script>
 </body>
 </html>
